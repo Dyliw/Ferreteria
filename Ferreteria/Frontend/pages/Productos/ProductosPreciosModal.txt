@@ -1,0 +1,109 @@
+import React, { useState, useEffect } from 'react';
+import Modal from '../Common/Modal';
+import { productoService } from '../../api/productoService';
+import { formatters } from '../../utils/formatters';
+import LoadingSpinner from '../Common/LoadingSpinner';
+
+const ProductoPreciosModal = ({ isOpen, onClose, productoId, productoNombre }) => {
+  const [precios, setPrecios] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [tiposCliente, setTiposCliente] = useState([]);
+
+  useEffect(() => {
+    if (isOpen && productoId) {
+      loadPrecios();
+      loadTiposCliente();
+    }
+  }, [isOpen, productoId]);
+
+  const loadPrecios = async () => {
+    setLoading(true);
+    try {
+      const response = await productoService.getPrices(productoId);
+      setPrecios(response.data.data);
+    } catch (error) {
+      console.error('Error cargando precios:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadTiposCliente = async () => {
+    try {
+      const response = await productoService.getPriceLists();
+      setTiposCliente(response.data.data);
+    } catch (error) {
+      console.error('Error cargando tipos:', error);
+    }
+  };
+
+  const getFactorColor = (factor) => {
+    if (factor >= 1.13) return 'text-red-600';
+    if (factor >= 1.10) return 'text-orange-600';
+    if (factor >= 1.09) return 'text-green-600';
+    return 'text-blue-600';
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title={`Precios - ${productoNombre}`} size="lg">
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="space-y-4">
+          <div className="bg-blue-50 rounded-lg p-3 text-sm text-blue-700">
+            <p>💡 Los precios se calculan automáticamente según el peso del producto y el tipo de cliente.</p>
+            <p className="text-xs mt-1">Puedes configurar precios especiales por volumen en la sección de "Precios especiales".</p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 px-3 font-semibold text-gray-600">Tipo de cliente</th>
+                  <th className="text-center py-2 px-3 font-semibold text-gray-600">1 pieza</th>
+                  <th className="text-center py-2 px-3 font-semibold text-gray-600">25 piezas</th>
+                  <th className="text-center py-2 px-3 font-semibold text-gray-600">50 piezas</th>
+                  <th className="text-center py-2 px-3 font-semibold text-gray-600">100 piezas</th>
+                  <th className="text-center py-2 px-3 font-semibold text-gray-600">Factor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {precios.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-2 px-3 font-medium">{item.nombre_tipo}</td>
+                    <td className="text-center py-2 px-3 font-mono">{formatters.currency(item.precio_calculado_1)}</td>
+                    <td className="text-center py-2 px-3 font-mono">{formatters.currency(item.precio_calculado_25)}</td>
+                    <td className="text-center py-2 px-3 font-mono">{formatters.currency(item.precio_calculado_50)}</td>
+                    <td className="text-center py-2 px-3 font-mono">{formatters.currency(item.precio_calculado_100)}</td>
+                    <td className={`text-center py-2 px-3 font-bold ${getFactorColor(item.factor)}`}>
+                      {item.factor ? `×${item.factor}` : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {tiposCliente.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h4 className="font-medium text-gray-700 mb-2">📋 Precios especiales configurados</h4>
+              <div className="space-y-2">
+                {tiposCliente.filter(t => t.id_lista).map((lista, idx) => (
+                  <div key={idx} className="bg-gray-50 rounded-lg p-3 text-sm">
+                    <p className="font-medium">{lista.nombre_lista}</p>
+                    <p className="text-gray-500 text-xs">Tipo de cliente: {lista.nombre_tipo_cliente}</p>
+                  </div>
+                ))}
+                {tiposCliente.filter(t => t.id_lista).length === 0 && (
+                  <p className="text-gray-400 text-sm">No hay precios especiales configurados</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </Modal>
+  );
+};
+
+export default ProductoPreciosModal;
