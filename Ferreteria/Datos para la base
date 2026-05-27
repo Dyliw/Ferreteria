@@ -1,0 +1,168 @@
+-- Algunos datos insertados dentro de la base de datos
+
+INSERT INTO tipos_movimiento (nombre_movimiento, signo, afecta_stock) VALUES
+('VENTA', -1, 1),
+('DEVOLUCIÓN', 1, 1),
+('COMPRA', 1, 1),
+('AJUSTE_INVENTARIO', 1, 1),
+('PEDIDO_RESERVADO', -1, 0);
+
+INSERT INTO roles (nombre_rol, descripcion) VALUES
+('ADMIN', 'Administrador'),
+('VENDEDOR', 'Vendedor'),
+('ALMACEN', 'Encargado'),
+('GERENTE', 'Gerente');
+
+INSERT INTO tipos_cliente (nombre_tipo, descuento_base, requiere_volumen_minimo, volumen_minimo) VALUES
+('PUBLICO', 0, 0, 0),
+('HERRERO', 5, 0, 0),
+('MAYOREO_TIPO1', 10, 1, 50),
+('MAYOREO_TIPO2', 15, 1, 100);
+('HERRERO1', )
+INSERT INTO listas_precios (nombre_lista, descripcion) VALUES
+('LISTA_PUBLICO', 'Precios público'),
+('LISTA_HERRERO', 'Precios herrero'),
+('LISTA_MAYOREO1', 'Mayoreo tipo1'),
+('LISTA_MAYOREO2', 'Mayoreo tipo2');
+SELECT * FROM estados_pedido
+INSERT INTO estados_pedido (nombre_estado, orden) VALUES
+('COTIZACIÓN', 1),
+('APROBADO', 2),
+('EN_PRODUCCIÓN', 3),
+('ENVIADO', 4),
+('ENTREGADO', 5),
+('CANCELADO', 6);
+UPDATE estados_pedido 
+SET nombre_estado = 'COTIZACION' 
+WHERE nombre_estado = 'COTIZACIÓN';
+
+UPDATE estados_pedido 
+SET nombre_estado = 'EN_PRODUCCION' 
+WHERE nombre_estado = 'EN_PRODUCCIÓN';
+
+INSERT INTO impuestos (nombre_impuesto, porcentaje, tipo_impuesto) VALUES
+('IVA', 16, 'IVA'),
+('IEPS_8', 8, 'IEPS'),
+('IEPS_15', 15, 'IEPS'),
+('IEPS_25', 25, 'IEPS'),
+('IEPS_30', 30, 'IEPS'),
+('IEPS_50', 50, 'IEPS');
+
+INSERT INTO categorias (nombre_categoria) VALUES
+('MONTEN'),
+('PTR'),
+('TUBO_CED30');
+
+INSERT INTO productos (nombre_producto, sku, id_categoria, stock_actual, stock_minimo, precio_base) VALUES
+('MONTEN 3x6 C-16', 'MTN-3X6-C16', 1, 500, 50, 850.00);
+('MONTEN 4x6 C-16', 'MTN-4X6-C16', 1, 500, 50, 950.00),
+('PTR 1 C13', 'PTR-1-C13', 2, 800, 80, 420.00),
+('TUBO CED 30 2"', 'TUBO-C30-2', 3, 400, 40, 750.00);
+
+INSERT INTO producto_impuesto (id_producto, id_impuesto) VALUES
+(1,1),(2,1),(3,1),(4,1);
+
+INSERT INTO precios_por_lista (id_producto, id_lista, cantidad_minima, cantidad_maxima, precio_unitario) VALUES
+(1,1,1,NULL,850.00),
+(1,2,1,NULL,807.50),
+(1,3,50,99,765.00),
+(1,4,100,NULL,722.50);
+
+INSERT INTO personas
+(nombre, apellido_paterno, apellido_materno, email, telefono, celular, rfc, curp, fecha_nacimiento, id_direccion)
+VALUES
+(
+    'Juan',
+    'Pérez',
+    'López',
+    'juan.perez@gmail.com',
+    '4431234567',
+    '4439876543',
+    'PELJ900101AB1',
+    'PELJ900101HMCRPN01',
+    '1990-01-01',
+    1
+),
+(
+    'María',
+    'González',
+    'Ruiz',
+    'maria.gonzalez@gmail.com',
+    '4432223344',
+    '4435556677',
+    'GORM920215CD2',
+    'GORM920215MMCNZR08',
+    '1992-02-15',
+    2
+),
+(
+    'Carlos',
+    'Ramírez',
+    'Torres',
+    'carlos.ramirez@gmail.com',
+    '4521112233',
+    '4529998877',
+    'RATC880530EF3',
+    'RATC880530HMCRRR04',
+    '1988-05-30',
+    3
+),
+(
+    'Lucía',
+    'Fernández',
+    'Morales',
+    'lucia.fernandez@gmail.com',
+    '7531239876',
+    '7534567890',
+    'FEML950720GH4',
+    'FEML950720MMCRRC02',
+    '1995-07-20',
+    4
+),
+(
+    'Diego',
+    'Navarro',
+    'Silva',
+    'diego.navarro@gmail.com',
+    '4438887766',
+    '4431112233',
+    'NASD970315IJ5',
+    'NASD970315HMCRLV09',
+    '1997-03-15',
+    5
+);
+
+INSERT INTO roles
+(nombre_rol, descripcion)
+VALUES
+('Administrador', 'Acceso total al sistema'),
+('Gerente', 'Gestión operativa y administrativa'),
+('Vendedor', 'Atención a clientes y ventas'),
+('Almacenista', 'Control de inventario');
+
+INSERT INTO clientes
+(id_persona, id_tipo_cliente, ultima_compra, total_compras, factor_descuento_extra, credito_autorizado, limite_credito)
+VALUES
+(3002, 4, GETDATE(), 15000, 2, 1, 10000);
+(6007, 1, GETDATE(), 3000, 4, 0, 0),
+(5, 2, GETDATE(), 45000, 5, 1, 50000);
+SELECT * FROM tipos_cliente
+
+INSERT INTO puestos
+(nombre_puesto, salario_base, descripcion)
+VALUES
+('Administrador General', 25000, 'Gestión completa del negocio'),
+('Gerente de Ventas', 18000, 'Supervisión de vendedores'),
+('Vendedor Mostrador', 9000, 'Atención al cliente'),
+('Encargado de Almacén', 10000, 'Control de inventario');
+
+INSERT INTO productos (nombre_producto, descripcion, id_categoria, stock_actual, stock_minimo, precio_base, unidad_medida, )
+
+SELECT * FROM empleados
+INSERT INTO empleados
+(id_persona, id_puesto, numero_empleado, fecha_contratacion, salario, comision_por_venta)
+VALUES
+(3004, 1, 'EMP001', '2022-01-15', 26000, 0);
+(2, 2, 'EMP002', '2023-03-10', 18500, 2),
+(3, 3, 'EMP003', '2024-06-01', 9500, 5),
+(4, 4, 'EMP004', '2023-11-20', 10500, 0);
